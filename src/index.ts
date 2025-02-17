@@ -11,22 +11,19 @@ app.get("/", (c) => {
 app.post("/debate/:id", async (c) => {
   try {
     const id = c.req.param("id");
-    const { motion, limit, history } = await c.req.json();
+    const { motion, limit, args } = await c.req.json();
 
-    if (!id || !motion || !history || !limit) {
+    if (!id || !motion || !args || !limit) {
       return c.json({ error: "必要なパラメタが揃っていません" }, 400);
     }
 
     const tool = debateTools.find((debateTool) => debateTool.id === id)!;
-    const { action, getPrompt } = tool;
+    const { getPrompt } = tool;
 
-    const prompt = getPrompt(motion, history, limit);
+    const prompt = getPrompt(motion, args, limit);
     const arg = await fetchOpenAI(prompt);
-    if (!arg) {
-      return c.json({ error: `${action}の取得に失敗しました` }, 500);
-    }
 
-    return c.json({ arg });
+    return c.json(arg);
   } catch (e) {
     return c.json({ error: `${e}` }, 500);
   }
