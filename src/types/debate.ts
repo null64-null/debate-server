@@ -1,11 +1,11 @@
-export type History = {
+export type Arg = {
   title: string;
   content: string;
-}[];
+};
 
 export type GetPrompt = (
   motino: string,
-  history: History,
+  history: Arg[],
   limit: number
 ) => string;
 

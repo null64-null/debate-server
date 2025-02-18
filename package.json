@@ -5,6 +5,7 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
+    "groq-sdk": "^0.15.0",
     "hono": "^4.7.1"
   },
   "devDependencies": {

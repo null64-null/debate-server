@@ -1,11 +1,12 @@
-import { GetPrompt, History } from "@/types/debate";
+import { GetPrompt, Arg } from "@/types/debate";
 
-const showHistory = (history: History): string => {
+const showArgs = (args: Arg[]): string => {
   let explanation = "";
 
-  history.map((arg) => {
-    explanation += `【${arg.title}】
-    ${arg.title}
+  args.map((arg) => {
+    explanation += `
+  【${arg.title}】
+    ${arg.content}
     
     `;
   });
@@ -15,7 +16,7 @@ const showHistory = (history: History): string => {
 
 const govArgumentPrompt: GetPrompt = (
   motion: string,
-  _history: History,
+  _args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割: 
@@ -37,7 +38,7 @@ const govArgumentPrompt: GetPrompt = (
 
 const oppArgumentPrompt: GetPrompt = (
   motion: string,
-  history: History,
+  args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割:
@@ -50,7 +51,7 @@ const oppArgumentPrompt: GetPrompt = (
 2. 理由を複数提示し、それぞれに対して論理的な説明を行ってください。
 3. 各理由には具体的な論拠や事例を示し、読者が納得しやすいようにしてください。
 4. 以下の賛成側立論に対する反論も加えてください:
-${showHistory(history)}
+${showArgs(args)}
 
 5. ${limit}文字以内で記述してください（空白や改行は0文字としてカウント）。
 6. 出力フォーマット:
@@ -62,7 +63,7 @@ ${showHistory(history)}
 
 const govRebuttalPrompt: GetPrompt = (
   motion: string,
-  history: History,
+  args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割:
@@ -73,7 +74,7 @@ const govRebuttalPrompt: GetPrompt = (
 
 1. 「${motion}」に賛成の立場で主張を展開してください。
 2. 反対側立論に対する反論を行い、以下のディベートの続きを行って下さい:
-${showHistory(history)}
+${showArgs(args)}
 
 3. 理由を複数提示し、それぞれに対して論理的な説明を行ってください。
 4. 各理由には具体的な論拠や事例を示し、読者が納得しやすいようにしてください。
@@ -87,7 +88,7 @@ ${showHistory(history)}
 
 const oppRebuttalPrompt: GetPrompt = (
   motion: string,
-  history: History,
+  args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割:
@@ -98,7 +99,7 @@ const oppRebuttalPrompt: GetPrompt = (
 
 1. 「${motion}」に反対の立場で主張を展開してください。
 2. 賛成側反論に対する反論を行い、以下のディベートの続きを行って下さい:
-${showHistory(history)}
+${showArgs(args)}
 
 3. 理由を複数提示し、それぞれに対して論理的な説明を行ってください。
 4. 各理由には具体的な論拠や事例を示し、読者が納得しやすいようにしてください。
@@ -112,7 +113,7 @@ ${showHistory(history)}
 
 const govSummaryPrompt: GetPrompt = (
   motion: string,
-  history: History,
+  args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割:
@@ -123,10 +124,10 @@ const govSummaryPrompt: GetPrompt = (
 
 1. 「${motion}」に賛成の立場で主張を展開してください。
 2. 以下のディベート経緯を踏まえて、なぜ賛成側チームがディベートの勝者か説明してください。:
-${showHistory(history)}
+${showArgs(args)}
 
 3. 以下のディベート経緯を踏まえて、必要に応じて反対側反論への反論も加えてください:
-${showHistory(history)}
+${showArgs(args)}
 
 4. 理由を複数提示し、それぞれに対して論理的な説明を行ってください。
 5. 各理由には具体的な論拠や事例を示し、読者が納得しやすいようにしてください。
@@ -140,7 +141,7 @@ ${showHistory(history)}
 
 const oppSummaryPrompt: GetPrompt = (
   motion: string,
-  history: History,
+  args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割:
@@ -151,7 +152,7 @@ const oppSummaryPrompt: GetPrompt = (
 
 1. 「${motion}」に反対の立場で主張を展開してください。
 2. 以下のディベート経緯を踏まえて、なぜ反対側チームがディベートの勝者か説明してください。:
-${showHistory(history)}
+${showArgs(args)}
 
 3. 理由を複数提示し、それぞれに対して論理的な説明を行ってください。
 4. 各理由には具体的な論拠や事例を示し、読者が納得しやすいようにしてください。
@@ -165,7 +166,7 @@ ${showHistory(history)}
 
 const judgePrompt: GetPrompt = (
   motion: string,
-  history: History,
+  args: Arg[],
   limit: number
 ): string => {
   const prompt = `あなたの役割:
@@ -176,7 +177,7 @@ const judgePrompt: GetPrompt = (
 
 1. 「${motion}」が議題です。
 2. 以下のディベート経緯を踏まえて、勝利チームを判定してください。:
-${showHistory(history)}
+${showArgs(args)}
 
 3. 理由を複数提示し、それぞれに対して論理的な説明を行ってください。
 4. 各理由には具体的な論拠や事例を示し、読者が納得しやすいようにしてください。
