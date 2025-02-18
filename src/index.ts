@@ -7,20 +7,12 @@ import Groq from "groq-sdk";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.use(
-  "*",
-  cors({
-    origin: ["http://localhost:3000"],
-  })
-);
-/*
 app.use("*", async (c, next) => {
   const corsMiddlewareHandler = cors({
     origin: c.env.WEB_SERVER_ORIGIN,
   });
   return corsMiddlewareHandler(c, next);
 });
-*/
 
 app.post("/debate/:id", async (c) => {
   try {
