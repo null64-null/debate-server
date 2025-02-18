@@ -4,8 +4,9 @@ const showArgs = (args: Arg[]): string => {
   let explanation = "";
 
   args.map((arg) => {
-    explanation += `【${arg.title}】
-    ${arg.title}
+    explanation += `
+  【${arg.title}】
+    ${arg.content}
     
     `;
   });
